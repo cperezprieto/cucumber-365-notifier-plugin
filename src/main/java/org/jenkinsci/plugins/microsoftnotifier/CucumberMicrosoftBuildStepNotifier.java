@@ -60,8 +60,13 @@ public class CucumberMicrosoftBuildStepNotifier extends Builder {
 			return true;
 		}
 
-		CucumberMicrosoftService service = new CucumberMicrosoftService(webhookUrl);
-		service.sendCucumberReportToMicrosoft(build, build.getWorkspace(), json, null, hideSuccessfulResults);
+		try {
+			CucumberMicrosoftService service = new CucumberMicrosoftService(webhookUrl);
+			service.sendCucumberReportToMicrosoft(build, build.getWorkspace(), json, null, hideSuccessfulResults);
+		} catch (Exception e) {
+			LOG.severe(e.getMessage());
+			listener.getLogger().println("[Cucumber365Notifier] Unable to send message to 365");
+		}
 
 		return true;
 	}
